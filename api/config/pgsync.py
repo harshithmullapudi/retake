@@ -15,8 +15,5 @@ class PgSyncConfig(Config):
         host = self.get_property("PGSYNC_HOST")
         port = self.get_property("PGSYNC_PORT")
         pgsync_use_tls = self.get_property("PGSYNC_SSL_ENABLED")
-        use_tls = pgsync_use_tls == "True" or pgsync_use_tls == "true"
-        if use_tls:
-            return f"https://{host}{port}"
-
-        return f"http://{host}:{port}"
+        use_tls = pgsync_use_tls in ["True", "true"]
+        return f"https://{host}{port}" if use_tls else f"http://{host}:{port}"

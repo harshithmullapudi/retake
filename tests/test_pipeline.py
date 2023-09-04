@@ -12,12 +12,11 @@ docker_client = docker.from_env()
 # generates containers of format pytestXYZ123-servicename-1 (i.e. pytest123456-postgres-1)
 def get_matching_containers(partial_name):
     all_containers = docker_client.containers.list(all=True)
-    matching_containers = [
+    return [
         container
         for container in all_containers
         if container.name.endswith(partial_name)
     ]
-    return matching_containers
 
 
 # Retrieve the IP address of a container on a given network, since we need the internal IP address of the

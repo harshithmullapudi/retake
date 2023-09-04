@@ -82,11 +82,7 @@ class PostgresExtractor(Extractor):
 
     def count(self, relation: str) -> int:
         self.cursor.execute(f"SELECT COUNT(*) FROM {relation}")
-        row = self.cursor.fetchone()
-        if row:
-            return cast(int, row[0])
-        else:
-            return 0
+        return cast(int, row[0]) if (row := self.cursor.fetchone()) else 0
 
     def extract_all(
         self, relation: str, columns: List[str], primary_key: str, chunk_size: int

@@ -48,5 +48,5 @@ class Client:
                 },
                 json={"index_name": index_name},
             )
-            if not response.status_code == 200:
+            if response.status_code != 200:
                 raise Exception(response.text)

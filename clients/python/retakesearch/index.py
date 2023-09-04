@@ -64,11 +64,11 @@ class Index:
             "source_dbname": database.dbname,
         }
 
-        pgsync_schema: Dict[str, Any] = dict()
-        pgsync_schema["database"] = database.dbname
-        pgsync_schema["index"] = self.index_name
-        pgsync_schema["nodes"] = table.to_schema()
-
+        pgsync_schema: Dict[str, Any] = {
+            "database": database.dbname,
+            "index": self.index_name,
+            "nodes": table.to_schema(),
+        }
         json = {
             "source": source,
             "pgsync_schema": pgsync_schema,
@@ -82,7 +82,7 @@ class Index:
             response = http.post(
                 f"{self.url}/index/add_source", headers=self.headers, json=json
             )
-            if not response.status_code == 200:
+            if response.status_code != 200:
                 raise Exception(response.text)
 
     def search(self, search: Search) -> Any:
@@ -125,7 +125,7 @@ class Index:
             response = http.post(
                 f"{self.url}/index/field/create", headers=self.headers, json=json
             )
-            if not response.status_code == 200:
+            if response.status_code != 200:
                 raise Exception(response.text)
 
     def vectorize(self, field_names: List[str]) -> None:
@@ -138,5 +138,5 @@ class Index:
             response = http.post(
                 f"{self.url}/index/vectorize", headers=self.headers, json=json
             )
-            if not response.status_code == 200:
+            if response.status_code != 200:
                 raise Exception(response.text)

@@ -38,5 +38,4 @@ class OpenSearchConfig(Config):
     @property
     def use_tls(self) -> bool:
         env = self.get_property("OPENSEARCH_USE_TLS")
-        use_tls = env == "True" or env == "true"
-        return use_tls
+        return env in ["True", "true"]

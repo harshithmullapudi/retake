@@ -89,7 +89,7 @@ async def get_index(index_name: str) -> JSONResponse:
 @router.post("/{tag}/upsert", tags=[tag])
 async def upsert(payload: UpsertPayload) -> JSONResponse:
     try:
-        if not len(payload.documents) == len(payload.ids):
+        if len(payload.documents) != len(payload.ids):
             return JSONResponse(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 content="Length of documents and ids arrays must be equal",

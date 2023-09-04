@@ -54,8 +54,7 @@ class AuthMiddleware(BaseHTTPMiddleware):
         auth_response = self.api_key_validator(request)
         if auth_response is not None and auth_response.status_code != 200:
             return auth_response
-        response = await call_next(request)
-        return response
+        return await call_next(request)
 
 
 app = FastAPI()

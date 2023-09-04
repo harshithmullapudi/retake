@@ -73,15 +73,13 @@ class Index:
     def _get_embedding_field_names(self) -> List[str]:
         properties = self.client.indices.get_mapping(index=self.name)[self.name][
             "mappings"
-        ].get("properties", dict())
+        ].get("properties", {})
 
-        knn_vector_properties = []
-
-        for prop, prop_data in properties.items():
-            if prop_data.get("type") == FieldType.KNN_VECTOR.value:
-                knn_vector_properties.append(prop)
-
-        return knn_vector_properties
+        return [
+            prop
+            for prop, prop_data in properties.items()
+            if prop_data.get("type") == FieldType.KNN_VECTOR.value
+        ]
 
     def _load_model(self) -> str:
         logger.info("Loading model...")

@@ -12,18 +12,17 @@ async def sync(request: Request) -> Response:
     try:
         data = await request.json()
 
-        if "source" in data:
-            source = data["source"]
-            if not (
-                "source_host" in source
-                and "source_port" in source
-                and "source_user" in source
-                and "source_password" in source
-            ):
-                return JSONResponse("invalid connection details", 400)
-        else:
+        if "source" not in data:
             return JSONResponse("source is missing", 400)
 
+        source = data["source"]
+        if (
+            "source_host" not in source
+            or "source_port" not in source
+            or "source_user" not in source
+            or "source_password" not in source
+        ):
+            return JSONResponse("invalid connection details", 400)
         if "schema" in data:
             schema = data["schema"]
         else:
@@ -57,10 +56,8 @@ async def sync(request: Request) -> Response:
 
         # Write schema to file
         file_name = "schema.json"
-        schema_file = open(file_name, "w")
-        schema_file.write(schema_str)
-        schema_file.close()
-
+        with open(file_name, "w") as schema_file:
+            schema_file.write(schema_str)
         # Run bootstrap
         bootstrap_proc = subprocess.Popen(
             ["/usr/local/bin/bootstrap", "--config", file_name],
